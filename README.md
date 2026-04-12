@@ -1,5 +1,9 @@
 # .ai-map
 
+[![npm](https://img.shields.io/npm/v/@misty001/aimap.svg)](https://www.npmjs.com/package/@misty001/aimap)
+[![license](https://img.shields.io/github/license/Shivu00rm/ai-map.svg)](LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/Shivu00rm/ai-map?style=social)](https://github.com/Shivu00rm/ai-map)
+
 **Persistent, self-updating project memory for any AI coding agent.**
 
 Your AI agent walks into every new conversation with amnesia. It re-scans your codebase, burns thousands of tokens, still misses the *why* behind your architecture, and repeats this every session.

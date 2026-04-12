@@ -3,7 +3,7 @@
 # .ai-map Framework Setup
 #
 # Usage:
-#   curl -fsSL https://raw.githubusercontent.com/YOUR_USERNAME/ai-map-framework/main/setup.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/Shivu00rm/ai-map/main/setup.sh | bash
 #   OR
 #   bash setup.sh /path/to/your/project
 #

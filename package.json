@@ -1,6 +1,6 @@
 {
   "name": "@misty001/aimap",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Persistent, auto-updating project memory for any AI coding agent (Claude, Cursor, Copilot, Windsurf).",
   "bin": {
     "ai-map": "cli.js"

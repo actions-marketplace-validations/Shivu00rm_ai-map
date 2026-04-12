@@ -81,8 +81,19 @@ function buildTree() {
 const reExport = /export\s+(?:default\s+)?(?:async\s+)?(?:function|class|const|let|var|interface|type|enum)\s+(\w+)/g;
 const reImport = /import\s+(?:[\w{},*\s]+\s+from\s+)?['"]([^'"]+)['"]/g;
 const reTodo = /(?:\/\/|\/\*|\*|#)\s*(TODO|FIXME|HACK|XXX)[:\s]+(.{0,200})/g;
-const reRouteNext = /^(app|pages)\/.*(route|page|index)\.(t|j)sx?$/;
-const reStub = /(?:function|const)\s+(\w+)[^{]*\{\s*(?:\/\/.*|\/\*[\s\S]*?\*\/|)\s*(?:throw\s+new\s+Error\(['"]?(?:not implemented|TODO|unimplemented)|return\s+null\s*;?\s*\})/i;
+const reRouteNext = /(?:^|\/)(app|pages)\/.*(route|page|index)\.(t|j)sx?$/;
+// Stub = file is tiny AND (contains explicit not-implemented throw OR is effectively empty).
+// `return null` alone is NOT a stub signal — legitimate code returns null constantly.
+const reStubThrow = /throw\s+new\s+Error\(['"`](?:not[\s_-]?implemented|unimplemented|TODO\b|stub\b)/i;
+function isStub(src) {
+  const code = src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/[^\n]*/g, '').trim();
+  if (!code) return true;
+  if (reStubThrow.test(src)) return true;
+  // Tiny file with no real exports beyond re-exports
+  const nonBlank = code.split('\n').filter(l => l.trim()).length;
+  if (nonBlank <= 3 && /^\s*export\s*\{?\s*\}?\s*;?\s*$/m.test(code)) return true;
+  return false;
+}
 
 for (const f of files) {
   let src;
@@ -108,14 +119,24 @@ for (const f of files) {
     if (tm) graph.todos.push({ file: rel, line: i + 1, kind: tm[1].toUpperCase(), text: tm[2].trim() });
   });
 
-  if (reStub.test(src)) graph.stubs.push(rel);
+  if (isStub(src)) graph.stubs.push(rel);
 
   if (reRouteNext.test(rel)) {
-    const route = '/' + rel.replace(/^(app|pages)\//, '').replace(/\/(route|page|index)\.(t|j)sx?$/, '').replace(/\[([^\]]+)\]/g, ':$1');
+    const route = '/' + rel
+      .replace(/^.*?(app|pages)\//, '')
+      .replace(/\/(route|page|index)\.(t|j)sx?$/, '')
+      .replace(/\([^)]+\)\//g, '')
+      .replace(/\[([^\]]+)\]/g, ':$1');
     graph.routes.push({ path: route || '/', file: rel, framework: 'next' });
   }
-  if (/\.(get|post|put|delete|patch)\s*\(\s*['"]([^'"]+)['"]/i.test(src)) {
-    const rm = /\.(get|post|put|delete|patch)\s*\(\s*['"]([^'"]+)['"]/gi;
+  // Express-like detection: only in files that look like server routes.
+  // Skip client components and non-server locations to avoid matching axios/fetch clients.
+  const isClient = /^\s*['"]use client['"]/m.test(src);
+  const looksLikeServer =
+    /\b(express|fastify|hono|koa|router|Router)\b/.test(src) &&
+    /\/(routes?|api|server|controllers?|handlers?)\//.test(rel);
+  if (!isClient && looksLikeServer) {
+    const rm = /\b(?:app|router|api)\.(get|post|put|delete|patch)\s*\(\s*['"`]([^'"`]+)['"`]/gi;
     let r;
     while ((r = rm.exec(src))) graph.routes.push({ method: r[1].toUpperCase(), path: r[2], file: rel, framework: 'express-like' });
   }

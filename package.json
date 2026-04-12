@@ -1,0 +1,41 @@
+{
+  "name": "ai-map",
+  "version": "0.1.0",
+  "description": "Persistent, auto-updating project memory for any AI coding agent (Claude, Cursor, Copilot, Windsurf).",
+  "bin": {
+    "ai-map": "./cli.mjs"
+  },
+  "type": "module",
+  "files": [
+    "cli.mjs",
+    "template",
+    "skill",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "ai",
+    "ai-agents",
+    "claude",
+    "claude-code",
+    "cursor",
+    "copilot",
+    "windsurf",
+    "context-engineering",
+    "developer-tools",
+    "llm"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shivu00rm/ai-map.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Shivu00rm/ai-map/issues"
+  },
+  "homepage": "https://github.com/Shivu00rm/ai-map#readme",
+  "author": "Shivu00rm",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  }
+}

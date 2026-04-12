@@ -80,21 +80,30 @@ your-project/
 
 ## Quick Start
 
-### 1. Install
+### 1. Install — one command
+
+```bash
+npx ai-map init
+```
+
+That's it. Copies `.ai-map/`, the bundled scanner, and rules files for every major agent (Claude, Cursor, Copilot, Windsurf) into the current directory.
+
+<details>
+<summary>Alternatives (no npm)</summary>
 
 ```bash
 # Unix / macOS
-git clone https://github.com/YOUR_USERNAME/ai-map-framework.git
-bash ai-map-framework/setup.sh /path/to/your/project
+git clone https://github.com/Shivu00rm/ai-map.git
+bash ai-map/setup.sh /path/to/your/project
 ```
 
 ```powershell
 # Windows
-git clone https://github.com/YOUR_USERNAME/ai-map-framework.git
-.\ai-map-framework\setup.ps1 -Target C:\path\to\your\project
+git clone https://github.com/Shivu00rm/ai-map.git
+.\ai-map\setup.ps1 -Target C:\path\to\your\project
 ```
 
-This copies `.ai-map/`, agent rules files (`AGENTS.md`, `CLAUDE.md`, `.cursorrules`, `.windsurfrules`, `.github/copilot-instructions.md`), and the scanner into your project.
+</details>
 
 ### 2. Open your AI agent — it does the rest
 
@@ -107,7 +116,35 @@ Start a conversation. The agent detects `AUTO-FILL: PENDING`, runs the bundled s
 
 Re-run anytime: `bash .ai-map/_parser/scan.sh`
 
-### 3. (Optional) Install as a Claude Skill
+### 3. (Optional) Keep it fresh automatically — GitHub Action
+
+Drop this into `.github/workflows/ai-map.yml`:
+
+```yaml
+name: ai-map
+on:
+  push: { branches: [main] }
+  pull_request: { branches: [main] }
+permissions:
+  contents: write
+  pull-requests: write
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: Shivu00rm/ai-map@v0
+        with: { mode: auto }
+```
+
+What it does:
+- On push → runs scanner, auto-commits refreshed `graph.json` if anything changed
+- On PR → posts a comment with the delta (new routes / TODOs / stubs)
+
+Fixes the #1 failure mode of every docs-in-repo system: **drift**.
+
+### 4. (Optional) Install as a Claude Skill
 
 ```bash
 cp -r skill/ai-map-init ~/.claude/skills/
@@ -115,7 +152,7 @@ cp -r skill/ai-map-init ~/.claude/skills/
 
 Then in any project: `/ai-map-init`. See `skill/README.md`. Non-Claude agents don't need this — the bundled rules files already point them at `.ai-map/`.
 
-### 4. Enforce the Rules
+### 5. Enforce the Rules
 
 The two critical rules that make `.ai-map` work:
 

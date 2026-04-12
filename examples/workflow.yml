@@ -1,0 +1,27 @@
+# Example: drop into .github/workflows/ai-map.yml in any project using ai-map.
+# Keeps .ai-map/ fresh automatically on push, and comments on PRs with a delta summary.
+
+name: ai-map
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: Shivu00rm/ai-map@v0
+        with:
+          mode: auto

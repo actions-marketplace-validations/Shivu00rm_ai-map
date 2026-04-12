@@ -1,5 +1,5 @@
 {
-  "name": "aimap",
+  "name": "@misty001/aimap",
   "version": "0.1.0",
   "description": "Persistent, auto-updating project memory for any AI coding agent (Claude, Cursor, Copilot, Windsurf).",
   "bin": {

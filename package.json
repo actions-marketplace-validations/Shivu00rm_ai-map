@@ -1,13 +1,13 @@
 {
-  "name": "ai-map",
+  "name": "aimap",
   "version": "0.1.0",
   "description": "Persistent, auto-updating project memory for any AI coding agent (Claude, Cursor, Copilot, Windsurf).",
   "bin": {
-    "ai-map": "./cli.mjs"
+    "ai-map": "cli.js"
   },
   "type": "module",
   "files": [
-    "cli.mjs",
+    "cli.js",
     "template",
     "skill",
     "README.md",

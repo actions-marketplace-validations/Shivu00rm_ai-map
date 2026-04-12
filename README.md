@@ -83,7 +83,7 @@ your-project/
 ### 1. Install — one command
 
 ```bash
-npx ai-map init
+npx aimap init
 ```
 
 That's it. Copies `.ai-map/`, the bundled scanner, and rules files for every major agent (Claude, Cursor, Copilot, Windsurf) into the current directory.

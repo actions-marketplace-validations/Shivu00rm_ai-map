@@ -1,5 +1,7 @@
 # Architectural Decisions
 
+<!-- AUTO-FILL: PENDING — see .ai-map/INIT.md. Only seed entries where README/commits reveal a non-obvious choice. Otherwise write "(decisions will be logged as they are made)". Do NOT fabricate rationale. -->
+
 <!-- 
 Format for each decision:
 

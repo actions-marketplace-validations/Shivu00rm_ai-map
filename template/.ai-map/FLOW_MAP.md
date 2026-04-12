@@ -1,5 +1,7 @@
 # Data Flow Maps
 
+<!-- AUTO-FILL: PENDING — see .ai-map/INIT.md. List routes from app/, pages/, api/, routes/ dirs (paths only, not handler code). Note ORM + schema file location if detected. If no routes exist, write "(no routes detected — update when added)". -->
+
 ## 1. API Request Lifecycle
 
 ```

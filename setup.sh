@@ -48,7 +48,7 @@ fi
 
 echo ""
 echo "Next steps:"
-echo "  1. Edit .ai-map/README.md with your project overview"
-echo "  2. Edit .ai-map/ARCHITECTURE.md with your system design"
-echo "  3. Edit .ai-map/SOP.md with your coding patterns"
-echo "  4. Start a conversation with your AI agent — it will read .ai-map/ first"
+echo "  1. Start a conversation with your AI agent in this project."
+echo "  2. The agent will detect the AUTO-FILL markers and populate .ai-map/ from your repo automatically."
+echo "  3. Review the filled files (.ai-map/README.md first) and correct anything wrong."
+echo "  4. See .ai-map/INIT.md for the auto-fill SOP and ongoing update triggers."

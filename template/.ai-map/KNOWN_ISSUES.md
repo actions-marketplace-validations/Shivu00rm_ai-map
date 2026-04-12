@@ -1,5 +1,7 @@
 # Known Issues & Tech Debt
 
+<!-- AUTO-FILL: PENDING — see .ai-map/INIT.md. Grep source for TODO / FIXME / HACK / XXX, cap at 20, list as file:line + comment. If none found, write "(none known)". -->
+
 Last updated: [DATE]
 
 ## Active Issues

@@ -1,5 +1,12 @@
 # Universal Agent Instructions
 
+## STEP 0: Auto-Init Check (First Session Only)
+
+Before reading anything else, check `.ai-map/README.md` for the marker `AUTO-FILL: PENDING`.
+
+- **If present** → read `.ai-map/INIT.md` and follow its SOP to auto-populate all `.ai-map/` files from the repo. Do NOT ask the user to fill files manually.
+- **If absent** → proceed to Step 1.
+
 ## MANDATORY: Read .ai-map/ First
 
 Before writing ANY code, read the `.ai-map/` directory:
@@ -17,8 +24,9 @@ Before writing ANY code, read the `.ai-map/` directory:
 
 1. **NEVER full-scan the codebase** if `.ai-map/` has what you need
 2. **NEVER read** `node_modules/`, `.next/`, `dist/`, `build/`
-3. **After ANY changes**, update relevant `.ai-map/` files
+3. **After ANY changes**, update relevant `.ai-map/` files (triggers in `INIT.md` Step 3)
 4. **Don't auto-commit/push** unless explicitly asked
+5. **Never leave `AUTO-FILL: PENDING` markers** in place — resolve them in the same session they're encountered
 
 ## Quick Reference
 

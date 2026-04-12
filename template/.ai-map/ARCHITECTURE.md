@@ -1,5 +1,7 @@
 # System Architecture
 
+<!-- AUTO-FILL: PENDING — see .ai-map/INIT.md. Populate directory tree (2 levels, skip node_modules/.next/dist/build/.git), entry points (from manifest scripts), and key modules (one line each from top-level source folders). -->
+
 ## Directory Structure
 
 ```

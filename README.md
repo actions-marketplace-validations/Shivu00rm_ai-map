@@ -1,20 +1,62 @@
-# .ai-map Framework
+# .ai-map
 
-**Stop burning tokens. Give your AI agent instant project context.**
+**Persistent, self-updating project memory for any AI coding agent.**
 
-`.ai-map` is a lightweight, agent-agnostic documentation framework that sits inside your project. Instead of letting AI agents scan your entire codebase every conversation (expensive, slow, error-prone), you maintain a small set of markdown files that give any agent full context in seconds.
+Your AI agent walks into every new conversation with amnesia. It re-scans your codebase, burns thousands of tokens, still misses the *why* behind your architecture, and repeats this every session.
 
-## The Problem
+`.ai-map` is a folder you drop into your repo that gives any agent — Claude, Cursor, Copilot, Windsurf, Kilo, Antigravity — instant context in a single read. A bundled scanner auto-populates it on first run. You don't write markdown by hand.
 
-Every time you start a new conversation with an AI coding agent (Claude, Cursor, Copilot, Windsurf, etc.), it:
+---
 
-1. Has zero memory of your project
-2. Scans hundreds of files to understand the codebase
-3. Burns thousands of tokens just to get oriented
-4. Still misses architectural decisions, known bugs, and conventions
-5. Repeats this waste every single session
+## Who this is for
 
-**`.ai-map` fixes this.** One directory. Seven files. Instant context.
+- **Solo devs** building projects that span weeks or months — tired of re-explaining the codebase to Claude every morning.
+- **Small teams** who want every agent (and every new dev) onboarded in seconds.
+- **Anyone switching between AI tools** — write your project context once, every agent reads it.
+- **Vibe coders** shipping fast — you stop losing the plot across sessions.
+
+Not for: 100k+ LOC monorepos with 50-person eng orgs. Use a dedicated code graph service for that. (You can still layer `.ai-map` on top for the *intent* layer it doesn't cover.)
+
+---
+
+## Why it's better than re-scanning every session
+
+| | Without `.ai-map` | With `.ai-map` |
+|---|---|---|
+| **First 10 min of a new chat** | Agent greps 50 files, guesses at architecture | Agent reads 8 markdown files, knows everything |
+| **Tokens per session** | 5k–20k wasted on orientation | ~1k to read the map |
+| **Memory across sessions** | Zero — amnesia every time | `SESSION_LOG.md` + `DECISIONS.md` carry forward |
+| **"Why did we do X?"** | Agent guesses | `DECISIONS.md` has the actual reason |
+| **Known bugs / TODOs** | Agent re-discovers each session | `KNOWN_ISSUES.md` is the single source |
+| **Switching from Claude to Cursor** | Re-train from scratch | Same `.ai-map/` — every agent reads it |
+
+---
+
+## Why it's different from Graphify and other code-graph tools
+
+Code graph tools (Graphify, Sourcegraph, etc.) give agents a **precise structural graph** of your codebase. That's valuable — but it's only half the picture.
+
+|  | Code graph tools | `.ai-map` |
+|---|---|---|
+| **What they capture** | Symbols, call graphs, dependency edges | Structure **+ decisions, known issues, goals, session history** |
+| **Install** | External service, CLI, or hosted platform | Drop a folder in your repo, done |
+| **Cost** | SaaS pricing or infra to host | Free. It's markdown + a tiny scanner. |
+| **Agents supported** | One integration per tool | Every agent reads the same markdown |
+| **Survives context resets** | Rebuilt from source each time | `SESSION_LOG.md` preserves continuity |
+| **Human-readable in PRs** | No — it's a graph DB | Yes — diff it like any other file |
+| **Captures *why*** | No | Yes, in `DECISIONS.md` |
+
+**Short version:** Graphify tells the agent the *skeleton*. `.ai-map` tells it the *skeleton, the intent, and the history*. You can use both — they complement each other — but for solo devs and small teams, `.ai-map` alone is usually enough.
+
+---
+
+## How it works in 30 seconds
+
+1. Copy `template/` into your project. You now have `.ai-map/` with 8 markdown files (all containing `AUTO-FILL: PENDING` markers) plus a bundled scanner.
+2. Start a chat with any AI agent. It detects the markers, runs `.ai-map/_parser/scan.sh`, and writes `.ai-map/_cache/graph.json` — a structured snapshot of your stack, routes, exports, imports, TODOs, and stubs.
+3. The agent reads `graph.json` and fills every markdown file with real content from your repo.
+4. You review. Done — permanent project memory.
+5. From now on, any change the agent makes updates the matching map file in the same turn. No drift.
 
 ## How It Works
 
@@ -28,7 +70,8 @@ your-project/
 │   ├── GOAL_TRACKER.md    # What's built. What's not. Current status.
 │   ├── DECISIONS.md       # Why things are built this way. Tradeoffs.
 │   ├── KNOWN_ISSUES.md    # Bugs. Tech debt. Edge cases.
-│   └── SESSION_LOG.md     # Recent session history for continuity.
+│   ├── SESSION_LOG.md     # Recent session history for continuity.
+│   └── INIT.md            # Auto-fill SOP — agents read this on first run to populate the files above.
 ├── CLAUDE.md              # Points Claude to .ai-map/
 ├── .cursorrules           # Points Cursor to .ai-map/
 ├── .windsurfrules         # Points Windsurf to .ai-map/
@@ -39,64 +82,38 @@ your-project/
 
 ### 1. Install
 
-Copy the `.ai-map/` template directory into your project root:
-
 ```bash
-# Clone the framework
+# Unix / macOS
 git clone https://github.com/YOUR_USERNAME/ai-map-framework.git
-
-# Copy template into your project
-cp -r ai-map-framework/template/.ai-map your-project/.ai-map
-cp ai-map-framework/template/AGENTS.md your-project/AGENTS.md
+bash ai-map-framework/setup.sh /path/to/your/project
 ```
 
-Or manually create the directory:
+```powershell
+# Windows
+git clone https://github.com/YOUR_USERNAME/ai-map-framework.git
+.\ai-map-framework\setup.ps1 -Target C:\path\to\your\project
+```
+
+This copies `.ai-map/`, agent rules files (`AGENTS.md`, `CLAUDE.md`, `.cursorrules`, `.windsurfrules`, `.github/copilot-instructions.md`), and the scanner into your project.
+
+### 2. Open your AI agent — it does the rest
+
+Start a conversation. The agent detects `AUTO-FILL: PENDING`, runs the bundled scanner, reads the resulting `graph.json`, and fills every map file from real repo data.
+
+**Scanner coverage:**
+- **JS / TS** — Next.js, React, Express, Vite; detects Prisma / Drizzle / TypeORM, next-auth / Clerk, vitest / jest
+- **Python** — FastAPI, Django, Flask; detects SQLAlchemy, pytest; parses via stdlib `ast`
+- **Other stacks** — agent falls back to Lite Mode (grep + manifest read)
+
+Re-run anytime: `bash .ai-map/_parser/scan.sh`
+
+### 3. (Optional) Install as a Claude Skill
 
 ```bash
-mkdir .ai-map
+cp -r skill/ai-map-init ~/.claude/skills/
 ```
 
-### 2. Fill In Your Project Context
-
-Edit each file in `.ai-map/` with your project's details. Start with:
-
-1. **README.md** — Project name, tech stack, critical rules
-2. **ARCHITECTURE.md** — Directory structure, key models, auth flow
-3. **SOP.md** — Your coding patterns (how to write routes, components, etc.)
-
-The other files can be built up over time as you work with your AI agent.
-
-### 3. Point Your Agent
-
-Create an entry point file so your AI agent knows to read `.ai-map/`:
-
-**For Claude Code** — create `CLAUDE.md`:
-```markdown
-# Read .ai-map/ directory before any codebase work.
-# Start with .ai-map/README.md for project overview.
-# After ANY file changes, update relevant .ai-map/ files.
-```
-
-**For Cursor** — create `.cursorrules`:
-```
-Read .ai-map/ directory before writing any code.
-Start with .ai-map/README.md for project overview.
-After ANY file changes, update relevant .ai-map/ files.
-```
-
-**For Windsurf** — create `.windsurfrules`:
-```
-Read .ai-map/ directory before writing any code.
-Start with .ai-map/README.md for project overview.
-After ANY file changes, update relevant .ai-map/ files.
-```
-
-**For GitHub Copilot** — create `.github/copilot-instructions.md`:
-```markdown
-Read .ai-map/ directory before writing any code.
-Start with .ai-map/README.md for project overview.
-After ANY file changes, update relevant .ai-map/ files.
-```
+Then in any project: `/ai-map-init`. See `skill/README.md`. Non-Claude agents don't need this — the bundled rules files already point them at `.ai-map/`.
 
 ### 4. Enforce the Rules
 

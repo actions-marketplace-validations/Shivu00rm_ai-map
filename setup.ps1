@@ -61,7 +61,7 @@ if (Test-Path $TemplateDir) {
 
 Write-Host ""
 Write-Host "Next steps:"
-Write-Host "  1. Edit .ai-map\README.md with your project overview"
-Write-Host "  2. Edit .ai-map\ARCHITECTURE.md with your system design"
-Write-Host "  3. Edit .ai-map\SOP.md with your coding patterns"
-Write-Host "  4. Start a conversation with your AI agent"
+Write-Host "  1. Start a conversation with your AI agent in this project."
+Write-Host "  2. The agent will detect AUTO-FILL markers and populate .ai-map\ from your repo automatically."
+Write-Host "  3. Review the filled files (.ai-map\README.md first) and correct anything wrong."
+Write-Host "  4. See .ai-map\INIT.md for the auto-fill SOP and ongoing update triggers."

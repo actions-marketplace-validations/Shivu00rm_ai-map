@@ -1,12 +1,17 @@
 # [Project Name] — AI Agent Context
 
 > **Every AI agent MUST read this directory before writing any code.**
+> **First-session agents: see `.ai-map/INIT.md` and auto-fill all `AUTO-FILL: PENDING` markers.**
+
+<!-- AUTO-FILL: PENDING — replace this block with project purpose (1–3 sentences), inferred from package manifest + root README -->
 
 ## What is [Project Name]?
 
 [1-3 sentence description of your project. What does it do? Who is it for?]
 
 ## Tech Stack
+
+<!-- AUTO-FILL: PENDING — populate from package manifest dependencies -->
 
 | Layer | Technology | Version |
 |-------|-----------|---------|

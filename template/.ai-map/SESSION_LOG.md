@@ -1,5 +1,7 @@
 # Session Log
 
+<!-- AUTO-FILL: PENDING — see .ai-map/INIT.md. First entry should be: "YYYY-MM-DD — .ai-map initialized via auto-fill. Project detected: <stack summary>." -->
+
 <!-- 
 Format:
 

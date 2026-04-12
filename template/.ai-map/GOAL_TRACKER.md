@@ -1,5 +1,7 @@
 # Goal Tracker
 
+<!-- AUTO-FILL: PENDING — see .ai-map/INIT.md. Infer "Completed" from existing routes + major folders. Infer "In Progress" from last 10 git commits + uncommitted changes. Leave "Planned" empty if no roadmap evidence. -->
+
 ## Status: [X]% Complete
 
 Last updated: [DATE]

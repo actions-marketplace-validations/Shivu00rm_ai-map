@@ -1,5 +1,7 @@
 # Coding Standards & Patterns (SOP)
 
+<!-- AUTO-FILL: PENDING — see .ai-map/INIT.md. Detect: language/framework from manifest, lint/format configs (.prettierrc, .eslintrc, ruff, black), tsconfig strict mode, test runner, and 2–3 observed conventions (import style, file naming, export style). Leave sections with no detected patterns as "(no convention detected yet)". -->
+
 ## API Route Pattern
 
 [Show the standard pattern for writing API routes in your project. Include auth, validation, error handling.]
